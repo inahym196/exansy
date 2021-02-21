@@ -7,6 +7,7 @@
     remote: dev
   delegate_to: localhost
   run_once: true
+  tags: skel
 
 - name: Put skelfile
   ansible.builtin.copy:
@@ -15,3 +16,4 @@
     mode: "1644"
     backup: yes
   become: true
+  tags: skel
