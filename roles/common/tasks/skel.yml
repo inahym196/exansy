@@ -1,0 +1,17 @@
+---
+# tasks file for common
+- name: Git pull dotfile
+  ansible.builtin.git:
+    repo: "{{ dotfile_repo }}"
+    dest: "{{ role_path }}/files/skel"
+    remote: dev
+  delegate_to: localhost
+  run_once: true
+
+- name: Put skelfile
+  ansible.builtin.copy:
+    src: "{{ role_path }}/files/skel"
+    dest: /etc
+    mode: "1644"
+    backup: yes
+  become: true
