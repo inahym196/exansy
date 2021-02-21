@@ -7,3 +7,7 @@
 - name: Include dist-key.yml
   include_tasks: dist-key.yml
   tags: dist-key
+
+- name: Include set-proxy.yml
+  include_tasks: set-proxy.yml
+  tags: [ set-proxy, set-apt-proxy ]
