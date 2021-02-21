@@ -3,7 +3,7 @@
 - name: Git pull dotfile
   ansible.builtin.git:
     repo: "{{ dotfile_repo }}"
-    dest: "{{ role_path }}/files/skel"
+    dest: "{{ skel_path }}"
     remote: dev
   delegate_to: localhost
   run_once: true
@@ -11,7 +11,7 @@
 
 - name: Put skelfile
   ansible.builtin.copy:
-    src: "{{ role_path }}/files/skel"
+    src: "{{ skel_path }}"
     dest: /etc
     mode: "1644"
     backup: yes
