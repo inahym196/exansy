@@ -16,7 +16,7 @@
   ansible.builtin.lineinfile:
     path: /etc/hosts
     regexp: "^127.0.0.1"
-    line: "127.0.0.1 {{ inventory_hostname }}.{{ ansible_domainname }} {{ inventory_hostname }} localhost"
+    line: "127.0.0.1 {{ inventory_hostname }}.{{ domainname }} {{ inventory_hostname }} localhost"
     insertbefore: BOF
   become: true
   tags: set-hostname
