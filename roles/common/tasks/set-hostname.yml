@@ -1,0 +1,35 @@
+---
+# tasks file for common
+
+- name: Set hostname
+  ansible.builtin.hostname:
+    name: "{{ inventory_hostname }}"
+  tags: set-hostname
+
+- name: Register etc/hosts
+  ansible.builtin.slurp:
+    src: /etc/hosts
+  register: hosts_before
+  tags: never,debug
+
+- name: Set domainname to localhost
+  ansible.builtin.lineinfile:
+    path: /etc/hosts
+    regexp: "^127.0.0.1"
+    line: "127.0.0.1 localhost {{ inventory_hostname }}.{{ ansible_domainname }} {{ inventory_hostname }}"
+    insertbefore: BOF
+  become: true
+  tags: set-hostname
+
+- name: Register etc/hosts
+  ansible.builtin.slurp:
+    src: /etc/hosts
+  register: hosts_after
+  tags: never,debug
+
+- name: Debug hosts
+  ansible.builtin.debug:
+    msg:
+      - "{{ hosts_before.content | b64decode }}"
+      - "{{ hosts_after.content | b64decode }}"
+  tags: never,debug

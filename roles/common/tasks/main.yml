@@ -11,3 +11,7 @@
 - name: Include set-proxy.yml
   include_tasks: set-proxy.yml
   tags: [ set-proxy, set-apt-proxy ]
+
+- name: Include set-hostname.yml
+  include_tasks: set-hostname.yml
+  tags: [ set-hostname ]
