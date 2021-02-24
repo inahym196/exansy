@@ -4,7 +4,6 @@
   ansible.builtin.git:
     repo: "{{ dotfile_repo }}"
     dest: "{{ skel_path }}"
-    remote: dev
   delegate_to: localhost
   run_once: true
   tags: skel
