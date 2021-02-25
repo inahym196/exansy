@@ -1,0 +1,17 @@
+---
+# tasks file for common
+- name: Include skel.yml
+  include_tasks: skel.yml
+  tags: skel
+
+- name: Include dist-key.yml
+  include_tasks: dist-key.yml
+  tags: dist-key
+
+- name: Include set-proxy.yml
+  include_tasks: set-proxy.yml
+  tags: [ set-proxy, set-apt-proxy ]
+
+- name: Include set-hostname.yml
+  include_tasks: set-hostname.yml
+  tags: [ set-hostname ]

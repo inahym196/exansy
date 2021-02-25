@@ -1,1 +1,3 @@
 ansible_ssh_pass: "{{ vault_ssh_pass }}"
+ansible_sudo_pass: "{{ vault_sudo_pass }}"
+domainname: inahym.tk
