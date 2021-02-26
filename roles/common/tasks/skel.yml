@@ -8,10 +8,20 @@
   run_once: true
   tags: skel
 
+- name: Register File except .git file
+  ansible.builtin.find:
+    paths: "{{ skel_path }}"
+    excludes: "*.git"
+    hidden: yes
+  register: skel
+  delegate_to: localhost
+  tags: skel
+
 - name: Put skelfile
   ansible.builtin.copy:
-    src: "{{ skel_path }}"
-    dest: /etc
+    src: "{{ item.path }}"
+    dest: /etc/skel/
     mode: "1644"
+  with_items: "{{ skel.files }}"
   become: true
   tags: skel
