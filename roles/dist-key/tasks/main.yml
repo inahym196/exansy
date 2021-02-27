@@ -1,0 +1,6 @@
+---
+# tasks file for dist-key
+- name: put ansible-publickey
+  ansible.posix.authorized_key:
+    user: ansible
+    key: "{{ lookup('file', '/home/ansible/.ssh/id_rsa.pub') }}"

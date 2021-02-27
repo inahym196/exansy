@@ -1,0 +1,24 @@
+---
+# tasks file for set-skel
+- name: Git pull dotfile
+  ansible.builtin.git:
+    repo: "{{ dotfile_repo }}"
+    dest: "{{ skel_path }}"
+  delegate_to: localhost
+  run_once: true
+
+- name: Register File except .git file
+  ansible.builtin.find:
+    paths: "{{ skel_path }}"
+    excludes: "*.git"
+    hidden: yes
+  register: skel
+  delegate_to: localhost
+
+- name: Put skelfile
+  ansible.builtin.copy:
+    src: "{{ item.path }}"
+    dest: /etc/skel/
+    mode: "1644"
+  with_items: "{{ skel.files }}"
+  become: true
