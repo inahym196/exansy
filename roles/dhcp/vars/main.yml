@@ -1,2 +1,9 @@
 ---
 # vars file for dhcp
+configs:
+  onevalue:
+    - domain-needed
+    - bogus-priv
+  twevalue:
+    - key: domain
+      value: "{{ domainname }}"

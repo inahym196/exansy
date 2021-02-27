@@ -4,5 +4,4 @@
   ansible.builtin.template:
     src: hosts.j2
     dest: /etc/hosts
-    backup: true
   become: true
