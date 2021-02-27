@@ -1,5 +1,18 @@
 ---
-# tasks file for set-skel
+- name: put ansible-publickey
+  ansible.posix.authorized_key:
+    user: ansible
+    key: "{{ lookup('file', '/home/ansible/.ssh/id_rsa.pub') }}"
+
+- name: Set apt-proxy
+  ansible.builtin.lineinfile:
+    path: "{{ apt_proxy_path }}"
+    regexp: "^Acquire::http::Proxy"
+    line: 'Acquire::http::Proxy "{{ apt_proxy_ip }}:{{ apt_proxy_port }}";'
+    create: true
+  become: true
+  tags: [ set-proxy, set-apt-proxy ]
+
 - name: Git pull dotfile
   ansible.builtin.git:
     repo: "{{ dotfile_repo }}"

@@ -1,4 +1,5 @@
 ---
-- hosts: vm
+- hosts: dns
   roles:
     - common
+    - dns

@@ -1,0 +1,12 @@
+---
+- name: Set hostname
+  ansible.builtin.hostname:
+    name: "{{ inventory_hostname }}"
+
+- name: Set domainname to localhost
+  ansible.builtin.lineinfile:
+    path: /etc/hosts
+    regexp: "^127.0.0.1"
+    line: "127.0.0.1 {{ inventory_hostname }}.{{ domainname }} {{ inventory_hostname }} localhost"
+    insertbefore: BOF
+  become: true
