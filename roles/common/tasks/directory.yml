@@ -1,0 +1,37 @@
+---
+- name: put ansible-publickey
+  ansible.posix.authorized_key:
+    user: ansible
+    key: "{{ lookup('file', '/home/ansible/.ssh/id_rsa.pub') }}"
+
+- name: Set apt-proxy
+  ansible.builtin.lineinfile:
+    path: "{{ apt_proxy_path }}"
+    regexp: "^Acquire::http::Proxy"
+    line: 'Acquire::http::Proxy "{{ apt_proxy_ip }}:{{ apt_proxy_port }}";'
+    create: true
+  become: true
+  tags: [ set-proxy, set-apt-proxy ]
+
+- name: Git pull dotfile
+  ansible.builtin.git:
+    repo: "{{ dotfile_repo }}"
+    dest: "{{ skel_path }}"
+  delegate_to: localhost
+  run_once: true
+
+- name: Register File except .git file
+  ansible.builtin.find:
+    paths: "{{ skel_path }}"
+    excludes: "*.git"
+    hidden: yes
+  register: skel
+  delegate_to: localhost
+
+- name: Put skelfile
+  ansible.builtin.copy:
+    src: "{{ item.path }}"
+    dest: /etc/skel/
+    mode: "1644"
+  with_items: "{{ skel.files }}"
+  become: true
