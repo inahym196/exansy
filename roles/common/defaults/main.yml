@@ -1,8 +1,2 @@
 ---
 # defaults file for common
-dotfile_repo: https://github.com/inahym196/dotfile.git
-skel_path: /etc/ansible/skel
-
-apt_proxy_path: /etc/apt/apt.conf.d/02proxy
-apt_proxy_ip: http://192.168.0.4
-apt_proxy_port: 8000
