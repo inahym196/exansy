@@ -1,0 +1,4 @@
+---
+# defaults file for set-skel
+dotfile_repo: https://github.com/inahym196/dotfile.git
+skel_path: /etc/ansible/skel

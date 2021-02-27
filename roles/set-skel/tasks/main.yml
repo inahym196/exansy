@@ -1,12 +1,11 @@
 ---
-# tasks file for common
+# tasks file for set-skel
 - name: Git pull dotfile
   ansible.builtin.git:
     repo: "{{ dotfile_repo }}"
     dest: "{{ skel_path }}"
   delegate_to: localhost
   run_once: true
-  tags: skel
 
 - name: Register File except .git file
   ansible.builtin.find:
@@ -15,7 +14,6 @@
     hidden: yes
   register: skel
   delegate_to: localhost
-  tags: skel
 
 - name: Put skelfile
   ansible.builtin.copy:
@@ -24,4 +22,3 @@
     mode: "1644"
   with_items: "{{ skel.files }}"
   become: true
-  tags: skel
