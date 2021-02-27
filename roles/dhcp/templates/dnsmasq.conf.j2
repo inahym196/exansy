@@ -1,0 +1,41 @@
+---
+# tasks file for dhcp
+domain-needed
+bogus-priv
+domain={{ domainname }}
+
+{% for option in dhcp.options %}
+dhcp-option=option:{{ option.tag }},{{ option.value }}
+{% endfor %}
+
+{% for range in dhcp.ranges %}
+dhcp-range=set:{{ range.tag }},{{ range.start }},{{ range.
+{% endfor %}
+ansible@ansible01:~/exansy(build-dns)$cat roles/build-dns/tasks/main.yml
+---
+# tasks file for build-dns
+
+- name: Install dnsmasq.service
+  ansible.builtin.apt:
+    name: dnsmasq
+    state: present
+
+#- name: Set dnsmasq.conf
+#  ansible.builtin.template:
+#    src: dnsmasq.conf.j2
+#    dest: /etc/dnsmasq.conf
+#  become: true
+
+- name: Set hosts
+  ansible.builtin.template:
+    src: hosts.j2
+    dest: /etc/hosts
+    backup: true
+  become: true
+
+#- name: debug
+#  ansible.builtin.debug:
+#    #var: hostvars["{{ item }}"].ansible_host
+#    #var: hostvars."{{ item }}"
+#    var: hostvars[item].ansible_host
+#  with_items: "{{ groups.all }}"

@@ -1,0 +1,5 @@
+---
+- name: Install dnsmasq.service
+  ansible.builtin.apt:
+    name: dnsmasq
+    state: present
