@@ -1,7 +1,4 @@
 ---
 - hosts: vm
   roles:
-    - dist-key
-    - set-hostname
-    - set-proxy
-    - set-skel
+    - common
