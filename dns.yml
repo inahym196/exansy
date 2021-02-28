@@ -3,4 +3,4 @@
   roles:
     - common
     - dns
-    - dhcp
+    - { role: dhcp, tags: dnsmasq }

@@ -1,5 +1,3 @@
----
-# tasks file for dhcp
 {% for config in configs.onevalue %}
 {{ config }}
 {% endfor %}
@@ -11,6 +9,6 @@
 dhcp-option=option:{{ option.tag }},{{ option.value }}
 {% endfor %}
 
-{% for range in dhcp.ranges %}
-dhcp-range=set:{{ range.tag }},{{ range.startip }},{{ range.mode }},{{ range.netmask }},{{ range.leasetime }}
+{% for nw in network %}
+dhcp-range=set:{{ nw.name }},{{ nw.range | ansible.netcommon.ipaddr('network') }},static,{{ nw.range | ansible.netcommon.ipaddr('netmask') }},infinite
 {% endfor %}

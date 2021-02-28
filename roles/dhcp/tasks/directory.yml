@@ -4,3 +4,12 @@
     src: dnsmasq.conf.j2
     dest: /etc/dnsmasq.conf
   become: true
+  tags: dnsmasq
+
+- name: Set dnsmasq.d/someNW
+  ansible.builtin.template:
+    src: /etc/dnsmasq_nw.j2
+    dest: "/etc/dnsmasq.d/{{ item.name }}"
+  become: true
+  tags: dnsmasq
+  with_items: "{{ network }}"

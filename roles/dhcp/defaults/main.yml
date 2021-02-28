@@ -1,2 +1,24 @@
 ---
 # defaults file for dhcp
+configs:
+  onevalue:
+    - domain-needed
+    - bogus-priv
+  twovalue:
+    - key: domain
+      value: "{{ domainname }}"
+
+dhcp:
+  options:
+    - tag: dns-server
+      value: 192.168.2.2
+    - tag: domain-search
+      value: "{{ domainname }}"
+    - tag: domain-search
+      value: "{{ domainname }}"
+
+network:
+  - name: openNW
+    range: 192.168.1.0/24
+  - name: closeNW
+    range: 192.168.2.0/24
