@@ -1,2 +1,7 @@
 ---
 # handlers file for dhcp
+- name: Restart dnsmasq
+  ansible.builtin.service:
+    name: dnsmasq
+    state: restarted
+  become: true

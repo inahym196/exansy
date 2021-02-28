@@ -1,3 +1,0 @@
-{% for nw in network %}
-dhcp-host={{ item.name }},{{ nw.macaddress }},{{ hostvars[inventory_hostname][ansible_host] }}
-{% endfor %}

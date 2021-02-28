@@ -1,15 +1,16 @@
 ---
-- name: Set dnsmasq.conf
-  ansible.builtin.template:
-    src: dnsmasq.conf.j2
-    dest: /etc/dnsmasq.conf
+- block:
+  - name: Set dnsmasq.conf
+    ansible.builtin.template:
+      src: dnsmasq.conf.j2
+      dest: /etc/dnsmasq.conf
+    notify: Restart dnsmasq
+  
+  - name: Set each NW config
+    ansible.builtin.template:
+      src: dnsmasq-nw.j2
+      dest: "/etc/dnsmasq.d/{{ item.name }}"
+    with_items: "{{ dhcp.networks }}"
+    notify: Restart dnsmasq
   become: true
   tags: dnsmasq
-
-- name: Set dnsmasq.d/someNW
-  ansible.builtin.template:
-    src: /etc/dnsmasq_nw.j2
-    dest: "/etc/dnsmasq.d/{{ item.name }}"
-  become: true
-  tags: dnsmasq
-  with_items: "{{ network }}"

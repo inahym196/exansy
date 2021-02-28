@@ -1,0 +1,7 @@
+{% for option in item.options %}
+dhcp-option={{ item.name }},option:{{ option.type }},{{ option.value }}
+{% endfor %}
+
+{% for host in item.hosts %}
+dhcp-host={{ item.name }},{{ host.mac }},{{ host.ip }}
+{% endfor %}

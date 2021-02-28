@@ -1,14 +1,13 @@
-{% for config in configs.onevalue %}
+{% for config in dhcp.global.configs.flags %}
 {{ config }}
 {% endfor %}
-{% for config in configs.twovalue %}
+{% for config in dhcp.global.configs.keyvalues %}
 {{ config.key }}={{ config.value }}
 {% endfor %}
 
-{% for option in dhcp.options %}
-dhcp-option=option:{{ option.tag }},{{ option.value }}
+{% for option in dhcp.global.options %}
+dhcp-option=option:{{ option.type }},{{ option.value }}
 {% endfor %}
-
-{% for nw in network %}
+{% for nw in dhcp.networks %}
 dhcp-range=set:{{ nw.name }},{{ nw.range | ansible.netcommon.ipaddr('network') }},static,{{ nw.range | ansible.netcommon.ipaddr('netmask') }},infinite
 {% endfor %}

@@ -1,24 +1,38 @@
 ---
 # defaults file for dhcp
-configs:
-  onevalue:
-    - domain-needed
-    - bogus-priv
-  twovalue:
-    - key: domain
-      value: "{{ domainname }}"
-
 dhcp:
-  options:
-    - tag: dns-server
-      value: 192.168.2.2
-    - tag: domain-search
-      value: "{{ domainname }}"
-    - tag: domain-search
-      value: "{{ domainname }}"
-
-network:
-  - name: openNW
-    range: 192.168.1.0/24
-  - name: closeNW
-    range: 192.168.2.0/24
+  global:
+    configs:
+      flags:
+        - domain-needed
+        - bogus-priv
+        - expand-hosts
+      keyvalues:
+        - key: domain
+          value: "{{ domainname }}"
+        - key: local
+          value: "/{{ domainname }}/"
+    options:
+      - type: dns-server
+        value: "192.168.2.2"
+      - type: domain-name
+        value: "{{ domainname }}"
+      - type: domain-search
+        value: "{{ domainname }}"
+  networks:
+    - name: openNW
+      range: 192.168.1.0/24
+      options:
+        - type: router
+          value: 192.168.1.1
+      hosts:
+        - ip: "{{ hostvars['proxy01'].ansible_host }}"
+          mac: "00:0c:29:5c:34:cb"
+    - name: closeNW
+      range: 192.168.2.0/24
+      options:
+        - type: router
+          value: 192.168.2.1
+      hosts:
+        - ip: "{{ hostvars['ansible01'].ansible_host }}"
+          mac: "00:0c:29:85:7a:d9"
