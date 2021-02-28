@@ -1,1 +1,6 @@
 ---
+- name: Set dnsmasq.conf
+  ansible.builtin.template:
+    src: dnsmasq.conf.j2
+    dest: /etc/dnsmasq.conf
+  become: true

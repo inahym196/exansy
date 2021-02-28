@@ -12,5 +12,5 @@ dhcp-option=option:{{ option.tag }},{{ option.value }}
 {% endfor %}
 
 {% for range in dhcp.ranges %}
-dhcp-range=set:{{ range.tag }},{{ range.start }},{{ range.mode }},{{ range.netmask }},{{ range.leasetime }}
+dhcp-range=set:{{ range.tag }},{{ range.startip }},{{ range.mode }},{{ range.netmask }},{{ range.leasetime }}
 {% endfor %}
