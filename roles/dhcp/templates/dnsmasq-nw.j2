@@ -1,0 +1,18 @@
+{%- for host in play_hosts %}
+{%- for iface in hostvars[host].ansible_facts.interfaces %}
+{%- set if_fact = hostvars[host].ansible_facts[iface] %}
+{%- if ( ( if_fact.macaddress is defined )
+    and ( if_fact.ipv4.address 
+          | ansible.netcommon.ipaddr(item.range) != None ) 
+) %}
+{%- set ipv4 = if_fact.ipv4.address %} 
+{%- set mac = if_fact.macaddress %}
+dhcp-host={{ item.name }},{{ mac }},{{ ipv4 }}
+{% endif %}
+{%- endfor %}
+{%- endfor %}
+
+{%- for option in item.options %}
+dhcp-option={{ item.name }},option:{{ option.type }},{{ option.value }}
+{%- endfor %}
+

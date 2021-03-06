@@ -1,0 +1,5 @@
+---
+# tasks file for dns
+- include_tasks: package.yml
+- include_tasks: directory.yml
+#- include_tasks: config.yml
