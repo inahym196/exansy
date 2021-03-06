@@ -1,0 +1,61 @@
+---
+- name: Load kernel modules
+  community.general.modprobe:
+    name: "{{ item }}"
+  with_items:
+    - overlay
+    - br_netfilter
+
+- name: Set sysctl config
+  ansible.posix.sysctl:
+    name: "{{ item }}"
+    value: "1"
+    sysctl_file: /etc/sysctl.d/k8s.conf
+  with_items:
+    - net.bridge.bridge-nf-call-iptables
+    - net.bridge.bridge-nf-call-ip6tables
+    - net.ipv4.ip_forward
+      
+- name: Install packages
+  ansible.builtin.apt:
+    name: "{{ item }}"
+    state: present
+    update_cache: yes
+  with_items:
+    - containerd
+    - apt-transport-https
+    - curl
+
+- name: Create /etc/containerd directory
+  ansible.builtin.file:
+    path: /etc/containerd
+    owner: root
+    group: root
+    mode: 755
+    state: directory
+
+- name: Configure containerd
+  ansible.builtin.shell: |
+    containerd config default > /etc/containerd/config.toml
+  notify: Restart containerd
+
+- name: Import k8s gpg key
+  ansible.builtin.apt_key:
+    url: https://packages.cloud.google.com/apt/doc/apt-key.gpg
+    state: present 
+
+- name: Set k8s package source list
+  ansible.builtin.copy:
+    dest: /etc/apt/sources.list.d/kubernetes.list
+    content: |
+      deb https://apt.kubernetes.io kubernetes-xenial main
+
+- name: Install kube-packages
+  ansible.builtin.apt:
+    name: "{{ item }}"
+  with_items:
+    - kubelet
+    - kubeadm
+    - kubectl
+  notify: Hold kube-packages
+
