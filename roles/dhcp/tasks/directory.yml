@@ -1,0 +1,19 @@
+---
+- block:
+  - name: Set dnsmasq.conf
+    ansible.builtin.template:
+      src: dnsmasq.conf.j2
+      dest: /etc/dnsmasq.conf
+    notify: Restart dnsmasq
+  
+  - name: Set each NW config
+    ansible.builtin.template:
+      src: dnsmasq-nw.j2
+      dest: "/etc/dnsmasq.d/{{ item.name }}"
+    with_items: "{{ dhcp.networks }}"
+    loop_control:
+      label: NW
+    notify: Restart dnsmasq
+  tags: dnsmasq
+  become: true 
+  when: inventory_hostname == "dns01"

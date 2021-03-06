@@ -1,0 +1,12 @@
+---
+- hosts: vm
+  gather_facts: yes
+  roles:
+    - common
+    - role: dns
+      tags: dns
+      when: inventory_hostname == 'dns01'
+
+    - role: dhcp
+      tags: dnsmasq,debug
+      when: inventory_hostname == 'dns01'

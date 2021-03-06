@@ -1,0 +1,32 @@
+{{ "192.168.1.1/24" | ansible.netcommon.ipaddr(item.range) }}
+{{ "192.168.2.1/24" | ansible.netcommon.ipaddr(item.range) }}
+{{ "192.168.4.1/24" | ansible.netcommon.ipaddr(item.range) }}
+{% for host in play_hosts %}
+{#% set host = 'dns01' %#}
+{% for iface in hostvars[host].ansible_facts.interfaces %}
+{% if ( ( hostvars[host].ansible_facts[iface].macaddress is defined )
+    and ( hostvars[host].ansible_facts[iface].ipv4.address 
+          | ansible.netcommon.ipaddr(item.range) != None ) 
+) %}
+{{ hostvars[host].ansible_facts[iface].ipv4.address }} 
+{{ hostvars[host].ansible_facts[iface].macaddress }}
+
+{% endif %}
+{% endfor %}
+{% endfor %}
+
+{% for option in item.options %}
+dhcp-option={{ item.name }},option:{{ option.type }},{{ option.value }}
+{% endfor %}
+
+{% for host in item.hosts %}
+#dhcp-host={{ item.name }},{{ host.mac }},{{ host.ip }}
+{% endfor %}
+
+{% for host in hosts_nics %}
+{% for nic in host.value %}
+{% if hostvars[host.key].ansible_facts[nic].module is defined %}
+{{ hostvars[host.key].ansible_facts[nic].macaddress }}
+{% endif %}
+{% endfor %}
+{% endfor %}
