@@ -1,4 +1,12 @@
 ---
+- name: Disable swap
+  block:
+    - ansible.builtin.shell: swapoff -a
+    - ansible.builtin.replace:
+        path: /etc/fstab
+        regexp: '^(\s*)([^#\n]+\s+)(\w+\s+)swap(\s+.*)$'
+        replace: '#\1\2\3swap\4'
+
 - name: Load kernel modules
   community.general.modprobe:
     name: "{{ item }}"
