@@ -11,6 +11,9 @@
       src: dnsmasq-nw.j2
       dest: "/etc/dnsmasq.d/{{ item.name }}"
     with_items: "{{ dhcp.networks }}"
+    loop_control:
+      label: NW
     notify: Restart dnsmasq
-  become: true
   tags: dnsmasq
+  become: true 
+  when: inventory_hostname == "dns01"

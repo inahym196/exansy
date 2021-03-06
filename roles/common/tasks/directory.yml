@@ -13,12 +13,12 @@
   become: true
   tags: [ set-proxy, set-apt-proxy ]
 
-- name: Git pull dotfile
-  ansible.builtin.git:
-    repo: "{{ dotfile_repo }}"
-    dest: "{{ skel_path }}"
-  delegate_to: localhost
-  run_once: true
+#- name: Git pull dotfile
+#  ansible.builtin.git:
+#    repo: "{{ dotfile_repo }}"
+#    dest: "{{ skel_path }}"
+#  delegate_to: localhost
+#  run_once: true
 
 - name: Register File except .git file
   ansible.builtin.find:
