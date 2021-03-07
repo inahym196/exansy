@@ -1,0 +1,5 @@
+---
+- hosts: k8swkr02
+  become: true
+  roles:
+    - k8s
