@@ -1,5 +1,9 @@
 ---
 - hosts: ldap
-  gather_facts: true
   roles:
     - ldap
+
+- hosts: ansible
+  become: true
+  roles:
+    - ldap-client

@@ -1,0 +1,7 @@
+---
+# handlers file for ldap-client
+- name: Restart sssd service
+  become: true
+  ansible.builtin.service:
+    name: sssd
+    state: restarted

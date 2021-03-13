@@ -1,2 +1,36 @@
 ---
 # defaults file for ldap
+
+base_dn: dc=ldap,dc=inahym,dc=tk
+
+Persons:
+  objectClass:
+    - top
+    - account
+    - posixAccount
+    - ldapPublicKey
+  members:
+    - cn: ansible
+      uid: ansible
+      uidNumber: 5000
+      gidNumber: 5000
+      homeDirectory: /home/ansible
+      sshPublicKey: 
+
+    - cn: alice
+      uidNumber: 5001
+      gidNumber: 5001
+    - cn: bob
+      uidNumber: 5002
+
+Groups:
+  objectClass:
+    - top
+    - posixGroup
+  members:
+    - cn: groupA
+      gidNumber: 10001
+    - cn: groupB
+      gidNumber: 10002
+    - cn: groupC
+      gidNumber: 10003

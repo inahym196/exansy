@@ -1,17 +1,59 @@
 ---
 # tasks file for ldap
-#- name: LDAP search
-#  community.general.ldap_search:
-#    dn: "dc=ldap,dc=inahym,dc=tk"
-#    bind_dn: "cn=admin,dc=ldap,dc=inahym,dc=tk"
-#    bind_pw: admin
-#    scope: children
-#  register: result
-#  become: true
 
-#- name: debug
-#  ansible.builtin.debug:
-#    var: result
+- name: Create OU
+  community.general.ldap_entry:
+    dn: "ou={{ item }},{{ base_dn }}"
+    objectClass: organizationalUnit
+  loop:
+    - Persons
+    - Groups
 
-- name: debug
-  ansible.builtin.command: ps
+- name: Create credkey directory
+  become: true
+  ansible.builtin.file:
+    path: "{{ ldap_vault_userkey_dir }}"
+    state: directory
+  delegate_to: localhost
+  run_once: true
+
+- name: Generate authorized keys
+  become: true
+  community.crypto.openssh_keypair:
+    path: "{{ ldap_vault_userkey_dir }}/{{ item.cn }}"
+  delegate_to: localhost
+  loop: "{{ Persons.members }}"
+  tags: debug
+
+- name: Create Person CN
+  community.general.ldap_entry:
+    dn: "cn={{ item.cn }},ou=Persons,{{ base_dn }}"
+    objectClass: "{{ Persons.objectClass }}"
+    attributes:
+      cn: "{{ item.cn }}"
+      uid: "{{ item.uid | default( item.cn ) }}"
+      uidNumber: "{{ item.uidNumber }}"
+      gidNumber: "{{ item.gidNumber | default( item.uidNumber )}}"
+      homeDirectory: "{{ item.homeDirectory | default( '/home/{{ item.cn }}' ) }}"
+      sshPublicKey: "{{ lookup('file', ldap_vault_userkey_dir + '/' + item.cn + '.pub' ) }}"
+  loop: "{{ Persons.members }}"
+  tags: debug
+
+- name: Create Group CN
+  community.general.ldap_entry:
+    dn: "cn={{ item.cn }},ou=Groups,{{ base_dn }}"
+    objectClass: "{{ Groups.objectClass }}"
+    attributes:
+      cn: "{{ item.cn }}"
+      gidNumber: "{{ item.gidNumber }}"
+  loop: "{{ Groups.members }}"
+
+- name: LDAP search
+  community.general.ldap_search:
+    dn: "ou=Persons,dc=ldap,dc=inahym,dc=tk"
+    #dn: "cn={9}openssh-lpk,cn=schema,cn=config"
+    filter: "(cn=*)"
+    #bind_dn: "cn=admin,dc=ldap,dc=inahym,dc=tk"
+    #bind_pw: "{{ ldap_vault_adminpass }}"
+    scope: children
+  tags: never,debug

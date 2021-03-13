@@ -1,0 +1,39 @@
+---
+# tasks file for ldap-client
+
+- name: Install sssd packages
+  ansible.builtin.package:
+    name: "{{ item }}"
+    state: present
+  loop:
+    - sssd
+    - sssd-client
+    - sssd-ldap
+    - oddjob-mkhomedir
+  notify: 
+    - Restart sssd service
+    - Restart oddjobd service
+
+- name: Copy sssd config
+  ansible.builtin.template:
+    src: sssd.conf.j2
+    dest: /etc/sssd/sssd.conf
+    mode: 600
+    owner: root
+    group: root
+
+- name: Run authconfig
+  ansible.builtin.shell: >
+    authconfig
+    --enablesssd
+    --enablesssdauth
+    --anablelocauthorize
+    --disableldap
+    --disableldapauth
+    --disableldaptls
+    --update;
+    authconfig
+    --enablemkhomedir
+    --update;
+
+
