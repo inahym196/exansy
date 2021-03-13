@@ -1,0 +1,17 @@
+---
+# tasks file for ldap
+#- name: LDAP search
+#  community.general.ldap_search:
+#    dn: "dc=ldap,dc=inahym,dc=tk"
+#    bind_dn: "cn=admin,dc=ldap,dc=inahym,dc=tk"
+#    bind_pw: admin
+#    scope: children
+#  register: result
+#  become: true
+
+#- name: debug
+#  ansible.builtin.debug:
+#    var: result
+
+- name: debug
+  ansible.builtin.command: ps
