@@ -1,0 +1,6 @@
+---
+- hosts: dns01
+  become: true
+  tasks:
+    - ping:
+      
