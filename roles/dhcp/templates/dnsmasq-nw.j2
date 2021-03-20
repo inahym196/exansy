@@ -2,7 +2,8 @@
 {%- for iface in hostvars[host].ansible_facts.interfaces %}
 {%- set if_fact = hostvars[host].ansible_facts[iface] %}
 {%- if ( ( if_fact.macaddress is defined )
-    and ( if_fact.ipv4.address 
+    and ( if_fact.ipv4.address )
+    and ( if_fact.ipv4.address
           | ansible.netcommon.ipaddr(item.range) != None ) 
 ) %}
 {%- set ipv4 = if_fact.ipv4.address %} 

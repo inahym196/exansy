@@ -2,7 +2,7 @@
 - hosts: vm
   gather_facts: yes
   roles:
-    - common
+#    - common
     - role: dns
       tags: dns
       when: inventory_hostname == 'dns01'
