@@ -1,9 +1,5 @@
 ---
 # tasks file for dns
-- ansible.builtin.debug:
-    var: hostvars[item].ansible_host
-  with_items: "{{ groups.all }}"
-  
 - name: Set hosts
   ansible.builtin.template:
     src: hosts.j2
