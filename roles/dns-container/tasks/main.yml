@@ -1,0 +1,11 @@
+---
+# tasks file for dns-container
+- name: Set dnsmasq.conf
+  ansible.builtin.template:
+    src: dnsmasq.conf.j2
+    dest: /srv/dns/dnsmasq.conf
+
+- name: Set hosts
+  ansible.builtin.template:
+    src: hosts.j2
+    dest: /srv/dns/hosts

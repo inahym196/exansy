@@ -3,5 +3,5 @@
 - name: Set hosts
   ansible.builtin.template:
     src: hosts.j2
-    dest: /srv/dns/hosts
+    dest: /etc/hosts
   become: true
